@@ -111,17 +111,6 @@ furnimarket/
 
 ---
 
-## 👥 Autores
-
-Este projeto foi desenvolvido pela equipe:
-
-* **Walgney** - *Arquitetura de Software*
-* **Ilton** - *Desenvolvimento Backend & Banco de Dados*
-* **Arcanjo** - *Engenharia de Frontend & UX/UI*
-* **Noé** - *Segurança, Integração & Autenticação*
-
----
-
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
