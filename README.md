@@ -103,6 +103,11 @@ furnimarket/
   ├── db/                    # Lógica de Banco de Dados (Schema, Actions)
   └── hooks/                 # Hooks customizados
 ```
+---
+
+# Imagens do projeto
+
+<img width="1080" height="752" alt="Untitled design (3)" src="https://github.com/user-attachments/assets/d580c119-d7ca-4285-9b2c-756943c1a584" />
 
 ---
 
