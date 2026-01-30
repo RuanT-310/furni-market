@@ -88,25 +88,20 @@ A arquitetura do projeto segue o padrão de componentes atomizados e roteamento 
 
 
 ```
-
 furnimarket/
-├── app/                      # Rotas e Telas (Expo Router)
-│   ├── (app)/                # Telas autenticadas
-│   │   ├── (tabs)/           # Navegação inferior
-│   │   ├── details/[id].tsx  # Detalhes do item
-│   │   └── edit/[id].tsx     # Edição do item
-│   └── _layout.tsx           # Layout Raiz (Providers)
-├── components/           # Componentes Reutilizáveis
-│   ├── feed/             # Componentes do Feed (Card, Header)
-│   ├── item-details/     # Componentes de Detalhes
-│   └── my-items/    
-├── src/
-    ├── db/               # Lógica de Banco de Dados (Schema, Actions)
-    ├── hooks/            # Hooks customizados
-    └── style.ts                
-
-
-
+├── app/                     # Rotas e Telas (Expo Router)
+│ ├── (app)/                 # Telas autenticadas
+│ │ ├── (tabs)/              # Navegação inferior
+│ │ ├── details/[id].tsx     # Detalhes do item
+│ │ └── edit/[id].tsx        # Edição do item
+│ └── _layout.tsx            # Layout Raiz (Providers)
+└── src/
+  ├── components/            # Componentes Reutilizáveis
+  │ ├── feed/                # Componentes do Feed (Card, Header)
+  │ ├── item-details/        # Componentes de Detalhes
+  │ └── my-items/            # Componentes de Meus Anúncios
+  ├── db/                    # Lógica de Banco de Dados (Schema, Actions)
+  └── hooks/                 # Hooks customizados
 ```
 
 ---
