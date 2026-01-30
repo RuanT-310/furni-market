@@ -1,21 +1,33 @@
 import { useAuth } from '@clerk/clerk-expo';
-import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Alert, FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { deleteItem, getMyItems } from '../../../src/db/actions';
-import { Item } from '../../../src/db/schema';
+import { Alert, FlatList, RefreshControl, StatusBar, StyleSheet, View } from 'react-native';
+
+// Database e Types
+import { deleteItem, getMyItems } from '@/src/db/actions';
+import { Item } from '@/src/db/schema';
+
+// Componentes Refatorados
+import { FloatingButton } from '@/src/components/FloatingButton';
+import { EmptyList } from '@/src/components/my-items/EmptyList';
+import { MyItemCard } from '@/src/components/my-items/MyItemCard';
+import { MyItemsHeader } from '@/src/components/my-items/MyItemsHeader';
 
 export default function MyItemsScreen() {
   const { userId } = useAuth();
   const router = useRouter();
+  const navigation = useNavigation();
+  
   const [items, setItems] = useState<Item[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadData = async () => {
     if (!userId) return;
+    setRefreshing(true); // Opcional: ativar loading visual no pull-to-refresh
     const data = await getMyItems(userId);
     setItems(data);
+    setRefreshing(false);
   };
 
   useFocusEffect(
@@ -26,8 +38,8 @@ export default function MyItemsScreen() {
 
   const handleDelete = (id: number) => {
     Alert.alert(
-      "Excluir Item",
-      "Tem certeza que deseja remover este anúncio?",
+      "Excluir Anúncio",
+      "Essa ação não pode ser desfeita. Deseja continuar?",
       [
         { text: "Cancelar", style: "cancel" },
         { 
@@ -35,80 +47,59 @@ export default function MyItemsScreen() {
           style: "destructive", 
           onPress: async () => {
             await deleteItem(id);
-            loadData(); // Recarrega a lista após excluir
+            loadData();
           }
         }
       ]
     );
   };
 
-  const renderItem = ({ item }: { item: Item }) => (
-    <View style={styles.card}>
-      <View style={styles.row}>
-        <Image source={{ uri: item.image }} style={styles.image} />
-        <View style={styles.info}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.price}>R$ {(item.price / 100).toFixed(2)}</Text>
-        </View>
-      </View>
-      
-      <View style={styles.actions}>
-        <TouchableOpacity 
-          style={[styles.btn, styles.editBtn]} 
-          onPress={() => router.push(`/(app)/edit/${item.id}`)}
-        >
-          <Ionicons name="create-outline" size={20} color="white" />
-          <Text style={styles.btnText}>Editar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.btn, styles.deleteBtn]} 
-          onPress={() => handleDelete(item.id)}
-        >
-          <Ionicons name="trash-outline" size={20} color="white" />
-          <Text style={styles.btnText}>Excluir</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  const handleEdit = (id: number) => {
+    router.push(`/(app)/edit/${id}`);
+  };
 
   return (
     <View style={styles.container}>
-      {items.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>Você ainda não tem anúncios.</Text>
-          <TouchableOpacity style={styles.createBtn} onPress={() => router.push('/(app)/(tabs)/add')}>
-            <Text style={styles.createBtnText}>Criar Anúncio</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <FlatList
-          data={items}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ padding: 16 }}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadData} />}
-        />
-      )}
+      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+
+      <MyItemsHeader 
+        itemCount={items.length} 
+        onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())} 
+      />
+
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContent}
+        
+        // Renderiza a lista vazia se não houver itens
+        ListEmptyComponent={() => (
+          <EmptyList onCreate={() => router.push('/(app)/(tabs)/add')} />
+        )}
+        
+        renderItem={({ item }) => (
+          <MyItemCard 
+            item={item} 
+            onEdit={handleEdit} 
+            onDelete={handleDelete} 
+          />
+        )}
+        
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={loadData} 
+            colors={['#007AFF']}
+          />
+        }
+      />
+      
+      <FloatingButton />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
-  card: { backgroundColor: 'white', borderRadius: 12, marginBottom: 16, padding: 12, elevation: 2 },
-  row: { flexDirection: 'row', marginBottom: 12 },
-  image: { width: 80, height: 80, borderRadius: 8, backgroundColor: '#ddd' },
-  info: { marginLeft: 12, flex: 1, justifyContent: 'center' },
-  title: { fontSize: 16, fontWeight: 'bold' },
-  price: { fontSize: 15, color: '#007AFF', marginTop: 4 },
-  actions: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: '#eee', paddingTop: 12 },
-  btn: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 8, borderRadius: 6, marginHorizontal: 4 },
-  editBtn: { backgroundColor: '#007AFF' },
-  deleteBtn: { backgroundColor: '#FF3B30' },
-  btnText: { color: 'white', fontWeight: 'bold', marginLeft: 6 },
-  emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyText: { fontSize: 18, color: '#666', marginBottom: 20 },
-  createBtn: { backgroundColor: '#007AFF', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 8 },
-  createBtnText: { color: 'white', fontWeight: 'bold' },
+  container: { flex: 1, backgroundColor: '#F5F7FA' },
+  listContent: { padding: 16, paddingBottom: 100, flexGrow: 1 },
 });
