@@ -1,50 +1,131 @@
-# Welcome to your Expo app 👋
+# 🛋️ FurniMarket
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> O marketplace móvel definitivo para comprar e vender móveis únicos.
 
-## Get started
+![Badge License](https://img.shields.io/badge/license-MIT-green)
+![Badge React Native](https://img.shields.io/badge/React_Native-0.72-blue)
+![Badge Expo](https://img.shields.io/badge/Expo-49-black)
+![Badge TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 
-1. Install dependencies
+## 📄 Sobre o Projeto
 
-   ```bash
-   npm install
-   ```
+O **FurniMarket** é um aplicativo mobile desenvolvido para facilitar a conexão entre vendedores e compradores de móveis usados e artesanais. Com uma interface limpa e intuitiva, o app permite anunciar produtos, favoritar itens de interesse e entrar em contato direto com vendedores via WhatsApp.
 
-2. Start the app
+O projeto foi construído utilizando a arquitetura moderna do **Expo Router** e foca em performance e experiência do usuário (UX).
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## ✨ Funcionalidades
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+* **🔐 Autenticação Segura:** Login e cadastro de usuários via **Clerk**.
+* **🏠 Feed Interativo:** Listagem de produtos com rolagem infinita e atualização (pull-to-refresh).
+* **🔍 Busca Inteligente:** Pesquisa em tempo real por título ou descrição do móvel.
+* **❤️ Favoritos:** Sistema para curtir e salvar anúncios, persistindo a escolha do usuário.
+* **📸 Upload de Imagens:** Integração nativa com Câmera e Galeria para fotos dos produtos.
+* **📦 Gestão de Anúncios (CRUD):** O usuário pode criar, editar e excluir seus próprios anúncios.
+* **💬 Contato Direto:** Deep Linking para abrir conversa no WhatsApp ou discador do celular.
+* **📱 Design Responsivo:** Interface adaptada para iOS e Android, respeitando Safe Areas (Notch/Ilha Dinâmica).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 🛠️ Tecnologias Utilizadas
 
-When you're ready, run:
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-```bash
-npm run reset-project
+* **[React Native](https://reactnative.dev/)** - Framework principal.
+* **[Expo](https://expo.dev/)** - Plataforma de desenvolvimento e Build.
+* **[Expo Router](https://docs.expo.dev/router/introduction/)** - Roteamento baseado em arquivos.
+* **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática para segurança do código.
+* **[Clerk](https://clerk.com/)** - Gestão de Autenticação e Usuários.
+* **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados (via Drizzle/Prisma ou drivers diretos).
+* **Safe Area Context** - Gestão de insets para dispositivos modernos.
+
+---
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+* Node.js instalado.
+* Gerenciador de pacotes (NPM ou Yarn).
+* App **Expo Go** instalado no seu celular (ou emulador Android/iOS configurado).
+
+### Instalação
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/furnimarket.git](https://github.com/seu-usuario/furnimarket.git)
+    cd furnimarket
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
+
+3.  **Configure as Variáveis de Ambiente:**
+    Crie um arquivo `.env` na raiz do projeto e adicione suas chaves (exemplo):
+    ```env
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+    DATABASE_URL=postgres://...
+    ```
+
+4.  **Execute o projeto:**
+    ```bash
+    npx expo start
+    ```
+
+5.  **Abra no celular:**
+    Escaneie o QR Code gerado no terminal com o app **Expo Go**.
+
+---
+
+## 📂 Estrutura de Pastas
+
+A arquitetura do projeto segue o padrão de componentes atomizados e roteamento do Expo:
+
+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+furnimarket/
+├── app/                      # Rotas e Telas (Expo Router)
+│   ├── (app)/                # Telas autenticadas
+│   │   ├── (tabs)/           # Navegação inferior
+│   │   ├── details/[id].tsx  # Detalhes do item
+│   │   └── edit/[id].tsx     # Edição do item
+│   └── _layout.tsx           # Layout Raiz (Providers)
+├── components/           # Componentes Reutilizáveis
+│   ├── feed/             # Componentes do Feed (Card, Header)
+│   ├── item-details/     # Componentes de Detalhes
+│   └── my-items/    
+├── src/
+    ├── db/               # Lógica de Banco de Dados (Schema, Actions)
+    ├── hooks/            # Hooks customizados
+    └── style.ts                
 
-## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 👥 Autores
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Este projeto foi desenvolvido pela equipe:
+
+* **Walgney** - *Arquitetura de Software*
+* **Ilton** - *Desenvolvimento Backend & Banco de Dados*
+* **Arcanjo** - *Engenharia de Frontend & UX/UI*
+* **Noé** - *Segurança, Integração & Autenticação*
+
+---
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+Feito com 💜 pela equipe FurniMarket.
